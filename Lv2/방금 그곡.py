@@ -29,3 +29,27 @@ def solution(m, musicinfos):
         return '(None)'
     else:
         return sorted(answer, key=lambda x: -x[0])[0][1]
+    
+#%%
+def replace(string):
+    return string.replace('A#', 'H').replace('B#', 'I').replace('C#', 'J').replace('D#', 'K').replace('F#', 'L').replace('G#', 'N')
+
+def solution(m, musicinfos):
+    answer = '(None)'
+    m = replace(m)
+    max_time = 0
+    
+    for info in musicinfos:
+        start, end, title, melody = info.split(',')
+        start = start.split(':')
+        end = end.split(':')
+
+        time = (int(end[0]) - int(start[0])) * 60 + int(end[1]) - int(start[1])
+        melody = replace(melody)
+
+        melody = melody * (time // len(melody)) + melody[0:time % len(melody)]
+
+        if m in melody and time > max_time:
+            max_time = time
+            answer = title
+    return answer
